@@ -14,9 +14,8 @@
  */
 package asterixReadOnlyClient;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
+import client.AbstractReadOnlyClientUtility;
+import config.Constants;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,8 +23,8 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import client.AbstractReadOnlyClientUtility;
-import config.Constants;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility {
 
@@ -35,7 +34,7 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
     URIBuilder roBuilder;
 
     public AsterixReadOnlyClientUtility(String cc, String qIxFile, String qGenConfigFile, String statsFile, int ignore,
-            String qSeqFile, String resultsFile) {
+                                        String qSeqFile, String resultsFile) {
         super(qIxFile, qGenConfigFile, statsFile, ignore, qSeqFile, resultsFile);
         this.ccUrl = cc;
     }

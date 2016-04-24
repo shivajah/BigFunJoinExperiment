@@ -14,11 +14,11 @@
  */
 package client;
 
+import structure.StatsCollector;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
-import structure.StatsCollector;
 
 public abstract class AbstractClientUtility {
 

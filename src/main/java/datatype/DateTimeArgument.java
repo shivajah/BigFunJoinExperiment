@@ -14,10 +14,10 @@
  */
 package datatype;
 
+import config.Constants;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import config.Constants;
 
 /**
  * @author pouria

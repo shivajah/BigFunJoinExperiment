@@ -14,13 +14,13 @@
  */
 package datatype;
 
-import java.util.StringTokenizer;
-
 import config.Constants;
+
+import java.util.StringTokenizer;
 
 /**
  * Parses an argument from a (dumped) string
- * 
+ *
  * @author pouria
  */
 public class ArgumentParser {

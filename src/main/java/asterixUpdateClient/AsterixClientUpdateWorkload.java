@@ -30,7 +30,7 @@ public class AsterixClientUpdateWorkload extends AbstractUpdateClient {
     AbstractUpdateWorkloadGenerator uwg;
 
     public AsterixClientUpdateWorkload(String cc, String dvName, String dsName, String keyName, UpdateTag upTag,
-            int batchSize, int limit, String updatesFile, String statsFile, int ignore) {
+                                       int batchSize, int limit, String updatesFile, String statsFile, int ignore) {
         super();
         this.ccUrl = cc;
         this.dvName = dvName;

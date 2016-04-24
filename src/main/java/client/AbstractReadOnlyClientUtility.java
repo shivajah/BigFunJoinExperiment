@@ -14,14 +14,16 @@
  */
 package client;
 
+import config.Constants;
+import structure.Pair;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import config.Constants;
-import structure.Pair;;
+;
 
 public abstract class AbstractReadOnlyClientUtility extends AbstractClientUtility {
 
@@ -33,7 +35,7 @@ public abstract class AbstractReadOnlyClientUtility extends AbstractClientUtilit
     public abstract void executeQuery(int qid, int vid, String qBody);
 
     public AbstractReadOnlyClientUtility(String qIxFile, String qGenConfigFile, String statsFile, int ignore,
-            String workloadFile, String resultsFile) {
+                                         String workloadFile, String resultsFile) {
         super(statsFile, resultsFile, ignore);
         this.qIndexFile = qIxFile;
         this.qGenConfigFile = qGenConfigFile;

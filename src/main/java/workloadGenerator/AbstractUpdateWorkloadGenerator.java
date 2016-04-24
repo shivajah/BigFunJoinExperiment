@@ -14,10 +14,10 @@
  */
 package workloadGenerator;
 
+import structure.Update;
+
 import java.io.BufferedReader;
 import java.io.Reader;
-
-import structure.Update;
 
 public abstract class AbstractUpdateWorkloadGenerator {
 

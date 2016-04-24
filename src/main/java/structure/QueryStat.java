@@ -14,10 +14,10 @@
  */
 package structure;
 
+import config.Constants;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import config.Constants;
 
 /**
  * @author pouria

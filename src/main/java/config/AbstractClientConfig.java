@@ -14,13 +14,12 @@
  */
 package config;
 
-import java.io.File;
-import java.util.Map;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import client.AbstractReadOnlyClient;
 import client.AbstractUpdateClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.util.Map;
 
 public abstract class AbstractClientConfig {
     private String clientConfigFile;
@@ -54,7 +53,7 @@ public abstract class AbstractClientConfig {
 
     /**
      * Added for debug/trace purposes only
-     * 
+     *
      * @return List all params and their values in the current config
      */
     public String printConfig() {

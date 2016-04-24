@@ -49,9 +49,9 @@ public class Constants {
     public static final int ASTX_AQL_REST_API_PORT = 19002;
     public static final int INVALID_QID = -1;
     public static final long INVALID_TIME = -1;
-    public static final String[] FREQ_KW = { "Surface", "Nexus" };
-    public static final String[] MEDIUM_KW = { "Galaxy", "Kindle" };
-    public static final String[] RARE_KW = { "Lumia", "XPeria" };
+    public static final String[] FREQ_KW = {"Surface", "Nexus"};
+    public static final String[] MEDIUM_KW = {"Galaxy", "Kindle"};
+    public static final String[] RARE_KW = {"Lumia", "XPeria"};
     public static final int MIN_LAT = 26;
     public static final int MAX_LAT = 47;
     public static final int MIN_LON = 68;

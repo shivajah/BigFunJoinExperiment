@@ -14,18 +14,18 @@
  */
 package config;
 
+import queryGenerator.QueryParamSetting;
+import queryGenerator.RandomQueryGenerator;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import queryGenerator.QueryParamSetting;
-import queryGenerator.RandomQueryGenerator;
-
 /**
  * Goes through a config file and configures a RandomQueryGenerator accordingly
- * 
+ *
  * @author pouria
  */
 public class RandomQueryGeneratorConfig {

@@ -14,18 +14,13 @@
  */
 package queryGenerator;
 
+import config.Constants;
+import datatype.*;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
-
-import config.Constants;
-import datatype.ArgumentParser;
-import datatype.DateTimeArgument;
-import datatype.DoubleArgument;
-import datatype.IArgument;
-import datatype.LongArgument;
-import datatype.StringArgument;
 
 public class RandomQueryGenerator {
 
@@ -311,7 +306,7 @@ public class RandomQueryGenerator {
         int longMinor = rand.nextInt(10000);
         double longitude = longMajor + ((double) longMinor) / 10000;
 
-        return new double[] { latitude, longitude };
+        return new double[]{latitude, longitude};
     }
 
     private DoubleArgument getRadius(int ver) {

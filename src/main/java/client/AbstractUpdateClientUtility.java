@@ -14,13 +14,17 @@
  */
 package client;
 
+import structure.AqlUpdate;
+import structure.Update;
+import workloadGenerator.AbstractUpdateWorkloadGenerator;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
-
-import structure.Update;
-import workloadGenerator.AbstractUpdateWorkloadGenerator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractUpdateClientUtility extends AbstractClientUtility {
 
@@ -29,13 +33,18 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
     protected String updatesFile;
     AbstractUpdateWorkloadGenerator uwg;
 
+    ExecutorService executorService;
+    // TODO: Take this as param in constructor
+    private final int DEFAULT_THREAD_POOL_SIZE = 50;
+
     public AbstractUpdateClientUtility(int batchSize, int limit, AbstractUpdateWorkloadGenerator uwg,
-            String updatesFile, String statsFile, int ignore) {
+                                       String updatesFile, String statsFile, int ignore) {
         super(statsFile, null, ignore);
         this.batchSize = batchSize;
         this.limit = limit;
         this.updatesFile = updatesFile;
         this.uwg = uwg;
+        executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
     }
 
     protected abstract void executeUpdate(int qid, Update update);
@@ -62,7 +71,8 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
                 sb.append(str).append("\n");
                 if ((++currentBatchSize) == batchSize) { //we have read enough to form the next batch
                     StringReader sr = new StringReader(sb.toString());
-                    runOneBatch(qid, sr, isWarmup);
+                    //runOneBatch(qid, sr, isWarmup);
+                    dispatchUpdate(qid, sr, isWarmup);
                     sb = null;
                     currentBatchSize = 0;
                     totalBatchCounter++;
@@ -71,13 +81,44 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
 
             if (currentBatchSize > 0) { //Last set of updates, whose size is less than batch size
                 StringReader sr = new StringReader(sb.toString());
-                runOneBatch(qid, sr, isWarmup);
+                //runOneBatch(qid, sr, isWarmup);
+                dispatchUpdate(qid, sr, isWarmup);
             }
 
             in.close();
+            shutDownExecutors();
         } catch (Exception e) {
             System.err.println("Problem in processing updates in Update Client Utility");
             e.printStackTrace();
+        }
+    }
+
+    private void dispatchUpdate(int qid, Reader r, boolean isWarmup) {
+        uwg.resetUpdatesInput(r);
+        Update nextUpdate = uwg.getNextUpdate();
+//        System.out.println(((AqlUpdate) nextUpdate).printAqlStatement());
+        executorService.submit(() -> {
+            //System.out.println("Executing update from thread " + Thread.currentThread().getName());
+            executeUpdate(qid, nextUpdate);
+        });
+    }
+
+    private void shutDownExecutors() {
+        try {
+            System.out.println("Attempt to shutdown");
+            executorService.shutdown();
+            System.out.println("Attempt complete");
+            executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS); // TODO: Is this necessary?
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (!executorService.isTerminated()) {
+                System.out.println("canceling all pending tasks");
+            }
+            executorService.shutdownNow();
+            System.out.println("Shutdown complete!");
         }
     }
 

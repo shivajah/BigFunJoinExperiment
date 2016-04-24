@@ -14,13 +14,13 @@
  */
 package workloadGenerator;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import config.RandomQueryGeneratorConfig;
 import datatype.IArgument;
 import queryGenerator.RandomQueryGenerator;
 import structure.Query;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class ReadOnlyWorkloadGenerator extends AbstractReadOnlyWorkloadGenerator {
 

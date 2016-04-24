@@ -14,13 +14,19 @@
  */
 package driver;
 
+import asterixUpdateClient.AsterixUpdateClientUtility;
 import client.AbstractClient;
 import config.AbstractClientConfig;
 import config.AsterixClientConfig;
 import config.Constants;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.concurrent.ExecutorService;
+
 public class Driver {
     public static void main(String[] args) {
+
         if (args.length != 1) {
             System.out.println("Correct Usage:\n");
             System.out.println("\t[0]: BigFUN home has to be set to a valid path.");
@@ -49,8 +55,13 @@ public class Driver {
             default:
                 System.err.println("Unknown/Invalid client type:\t" + clientTypeTag);
         }
-
+        Instant current, end;
+        current = Instant.now();
         client.execute();
+        end = Instant.now();
+        System.out.println("Total time: " + Duration.between(end, current));
+        System.out.println("Total Passed: " + AsterixUpdateClientUtility.passedTxns);
+        System.out.println("Total failed: " + AsterixUpdateClientUtility.failedTxns);
         client.generateReport();
         System.out.println("\nBigFUN Benchmark is done.\n");
     }
