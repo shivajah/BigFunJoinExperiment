@@ -49,9 +49,9 @@ public class Driver {
                 client = clientConfig.readReadOnlyClientConfig(bigFunHome);
                 break;
             case Constants.ASTX_UPDATE_CLIENT_TAG:
-                client = clientConfig.readUpdateClientConfig(bigFunHome);
+            case Constants.ASTX_CONCURRENT_UPDATE_CLIENT_TAG:
+                client = clientConfig.readUpdateClientConfig(bigFunHome, clientTypeTag);
                 break;
-
             default:
                 System.err.println("Unknown/Invalid client type:\t" + clientTypeTag);
         }

@@ -31,7 +31,8 @@ public abstract class AbstractClientConfig {
 
     public abstract AbstractReadOnlyClient readReadOnlyClientConfig(String bigFunHomePath);
 
-    public abstract AbstractUpdateClient readUpdateClientConfig(String bigFunHomePath);
+    public abstract AbstractUpdateClient readUpdateClientConfig(String bigFunHomePath, String updateType);
+
 
     public void parseConfigFile() {
         ObjectMapper mapper = new ObjectMapper();

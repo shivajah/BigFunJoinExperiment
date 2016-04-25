@@ -48,3 +48,6 @@ target
 
 # Code Recommenders
 .recommenders/
+
+# IntelliJ
+.idea/

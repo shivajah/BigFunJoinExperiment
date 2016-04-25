@@ -44,6 +44,7 @@ public class Constants {
     public static final String ASTX_RANDOM_CLIENT_TAG = "AsterixdbReadOnly";
     public static final String ASTX_DUMP_RESULTS = "dumpResults";
     public static final String ASTX_UPDATE_CLIENT_TAG = "AsterixdbUpdate";
+    public static final String ASTX_CONCURRENT_UPDATE_CLIENT_TAG = "AsterixConcurrentUpdate";
     public static final String ASTX_DS_NAME = "dataset";
     public static final String ASTX_KEY_NAME = "primary_key";
     public static final int ASTX_AQL_REST_API_PORT = 19002;

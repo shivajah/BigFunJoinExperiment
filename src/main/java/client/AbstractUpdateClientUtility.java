@@ -35,7 +35,7 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
 
     ExecutorService executorService;
     // TODO: Take this as param in constructor
-    private final int DEFAULT_THREAD_POOL_SIZE = 50;
+    private final int DEFAULT_THREAD_POOL_SIZE = 10;
 
     public AbstractUpdateClientUtility(int batchSize, int limit, AbstractUpdateWorkloadGenerator uwg,
                                        String updatesFile, String statsFile, int ignore) {
@@ -105,9 +105,7 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
 
     private void shutDownExecutors() {
         try {
-            System.out.println("Attempt to shutdown");
             executorService.shutdown();
-            System.out.println("Attempt complete");
             executorService.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS); // TODO: Is this necessary?
 
         } catch (InterruptedException e) {
@@ -117,6 +115,7 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
             if (!executorService.isTerminated()) {
                 System.out.println("canceling all pending tasks");
             }
+            printTimeCounters();
             executorService.shutdownNow();
             System.out.println("Shutdown complete!");
         }
@@ -129,4 +128,6 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
     }
 
     public abstract void resetTraceCounters();
+
+    public void printTimeCounters() {}
 }

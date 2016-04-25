@@ -16,6 +16,7 @@ package config;
 
 import asterixReadOnlyClient.AsterixClientReadOnlyWorkload;
 import asterixUpdateClient.AsterixClientUpdateWorkload;
+import asterixUpdateClient.AsterixConcurrentUpdateWorkload;
 import client.AbstractReadOnlyClient;
 import client.AbstractUpdateClient;
 import structure.UpdateTag;
@@ -93,7 +94,7 @@ public class AsterixClientConfig extends AbstractClientConfig {
     }
 
     @Override
-    public AbstractUpdateClient readUpdateClientConfig(String bigFunHomePath) {
+    public AbstractUpdateClient readUpdateClientConfig(String bigFunHomePath, String updateType) {
         String cc = (String) getParamValue(Constants.CC_URL);
         String oprType = (String) getParamValue(Constants.UPDATE_OPR_TYPE_TAG);
 
@@ -129,8 +130,14 @@ public class AsterixClientConfig extends AbstractClientConfig {
                     + " against AsterixDB");
             return null;
         }
-
-        return new AsterixClientUpdateWorkload(cc, dvName, dsName, keyName, upTag, batchSize, limit, updatesFile,
-                statsFile, ignore);
+        switch (updateType) {
+            case Constants.ASTX_CONCURRENT_UPDATE_CLIENT_TAG:
+                return new AsterixClientUpdateWorkload(cc, dvName, dsName, keyName, upTag, batchSize, limit, updatesFile,
+                        statsFile, ignore, true);
+            case Constants.ASTX_UPDATE_CLIENT_TAG:
+            default:
+                return new AsterixClientUpdateWorkload(cc, dvName, dsName, keyName, upTag, batchSize, limit, updatesFile,
+                        statsFile, ignore, false);
+        }
     }
 }
