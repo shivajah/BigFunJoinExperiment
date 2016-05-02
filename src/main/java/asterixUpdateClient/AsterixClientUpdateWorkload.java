@@ -30,7 +30,7 @@ public class AsterixClientUpdateWorkload extends AbstractUpdateClient {
     AbstractUpdateWorkloadGenerator uwg;
 
     public AsterixClientUpdateWorkload(String cc, String dvName, String dsName, String keyName, UpdateTag upTag,
-                                       int batchSize, int limit, String updatesFile, String statsFile, int ignore, boolean isConcurrent) {
+                                       int batchSize, int limit, String updatesFile, String statsFile, int ignore) {
         super();
         this.ccUrl = cc;
         this.dvName = dvName;
@@ -38,17 +38,31 @@ public class AsterixClientUpdateWorkload extends AbstractUpdateClient {
         this.keyName = keyName;
         this.upTag = upTag;
         initUpdateWorkloadGen();
-        setClientUtil(batchSize, limit, updatesFile, statsFile, ignore, isConcurrent);
+        setClientUtil(batchSize, limit, updatesFile, statsFile, ignore);
+        clUtil.init();
+    }
+
+    public AsterixClientUpdateWorkload(String cc, String dvName, String dsName, String keyName, UpdateTag upTag,
+                                       int batchSize, int limit, String updatesFile, String statsFile, int ignore, int threadPoolSize) {
+        super();
+        this.ccUrl = cc;
+        this.dvName = dvName;
+        this.dsName = dsName;
+        this.keyName = keyName;
+        this.upTag = upTag;
+        initUpdateWorkloadGen();
+        setClientUtil(batchSize, limit, updatesFile, statsFile, ignore, threadPoolSize);
         clUtil.init();
     }
 
     @Override
-    protected void setClientUtil(int batchSize, int limit, String updatesFile, String statsFile, int ignore, boolean isConcurrent) {
-        if (isConcurrent) {
-            clUtil = new AsterixConcurrentUpdateWorkload(ccUrl, batchSize, limit, uwg, updatesFile, statsFile, ignore);
-        } else {
-            clUtil = new AsterixUpdateClientUtility(ccUrl, batchSize, limit, uwg, updatesFile, statsFile, ignore);
-        }
+    protected void setClientUtil(int batchSize, int limit, String updatesFile, String statsFile, int ignore, int threadPoolSize) {
+        clUtil = new AsterixConcurrentUpdateWorkload(ccUrl, batchSize, limit, uwg, updatesFile, statsFile, ignore, threadPoolSize);
+    }
+
+    @Override
+    protected void setClientUtil(int batchSize, int limit, String updatesFile, String statsFile, int ignore) {
+        clUtil = new AsterixUpdateClientUtility(ccUrl, batchSize, limit, uwg, updatesFile, statsFile, ignore);
     }
 
     @Override

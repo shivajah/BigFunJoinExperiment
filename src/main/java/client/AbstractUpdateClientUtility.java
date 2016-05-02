@@ -14,6 +14,7 @@
  */
 package client;
 
+import config.AbstractClientConfig;
 import structure.AqlUpdate;
 import structure.Update;
 import workloadGenerator.AbstractUpdateWorkloadGenerator;
@@ -32,6 +33,8 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
     int batchSize;
     protected String updatesFile;
     AbstractUpdateWorkloadGenerator uwg;
+
+    AbstractClientConfig workloadConfiguration;
 
     ExecutorService executorService;
     // TODO: Take this as param in constructor
@@ -130,4 +133,5 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
     public abstract void resetTraceCounters();
 
     public void printTimeCounters() {}
+
 }

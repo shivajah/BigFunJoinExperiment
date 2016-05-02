@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-;
 
 public abstract class AbstractReadOnlyClientUtility extends AbstractClientUtility {
 
@@ -44,7 +43,7 @@ public abstract class AbstractReadOnlyClientUtility extends AbstractClientUtilit
 
     private void loadWorkloadFile(String workloadFile) {
         if (qvids == null) {
-            this.qvids = new ArrayList<Pair>();
+            this.qvids =  new ArrayList<Pair>();
         }
         this.qvids.clear();
         try {

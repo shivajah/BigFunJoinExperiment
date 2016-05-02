@@ -69,4 +69,6 @@ public class Constants {
     public static final String WORKLOAD_FILE_NAME = "workload.txt";
     public static final String STATS_FILE_NAME = "stats.txt";
     public static final String Q_GEN_CONFIG_FILE_NAME = "query-params.txt";
+    public static final String THREAD_POOL_SIZE = "thread-pool-size";
+    public static final int DEFAULT_THREAD_POOL_SIZE = 10;
 }

@@ -3,6 +3,8 @@ package asterixUpdateClient;
 import client.AbstractUpdateClient;
 import client.AbstractUpdateClientUtility;
 import config.Constants;
+import org.apache.commons.math3.distribution.AbstractRealDistribution;
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,6 +23,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 /**
@@ -38,27 +42,34 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
 
     private Map<String, List<Long>> timeCounters;
 
+    //private AbstractRealDistribution waitTimeDistribution;
     private PoissonDistribution waitTimeDistribution;
 
     private final double DISTRIBUTION_MEAN = 10;
 
     private final double DISTRIBUTION_EPSILON = 10;
 
-    private boolean NO_WAIT = false;
+    private boolean NO_WAIT = true;
+
+    private volatile int counter = 0;
+
+    private ExecutorService executorService;
+
+    private int threadPoolSize;
 
     public AsterixConcurrentUpdateWorkload(String cc, int batchSize, int limit, AbstractUpdateWorkloadGenerator uwg,
-                                      String updatesFile, String statsFile, int ignore) {
+                                      String updatesFile, String statsFile, int ignore, int threadPoolSize) {
         super(batchSize, limit, uwg, updatesFile, statsFile, ignore);
         this.ccUrl = cc;
         timeCounters = new ConcurrentHashMap<>();
+        this.threadPoolSize = threadPoolSize;
         waitTimeDistribution = new PoissonDistribution(DISTRIBUTION_MEAN, DISTRIBUTION_EPSILON);
+        //waitTimeDistribution = new NormalDistribution();
+        executorService = Executors.newFixedThreadPool(threadPoolSize);
+
     }
 
-    public void prettyPrintStats() {
-        System.out.println(timeCounters);
-    }
-
-    private synchronized int getWaitTime() {
+    private synchronized long getWaitTime() {
         if (NO_WAIT) {
             return 0;
         }
@@ -81,8 +92,8 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
             EntityUtils.consume(entity);
             String threadName = Thread.currentThread().getName();
             long waitTime = getWaitTime();
-            System.out.println("T: " + threadName + " sleep: " + (waitTime * 10) + "ms");
-            Thread.sleep(waitTime * 10);
+            //System.out.println("T: " + threadName + " sleep: " + (waitTime * 10) + "ms");
+            //Thread.sleep(waitTime);
 
             if (timeCounters.get(threadName) != null) {
                 timeCounters.get(threadName).add(waitTime);
@@ -90,6 +101,7 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
                 timeCounters.put(threadName, new ArrayList<Long>());
                 timeCounters.get(threadName).add(waitTime);
             }
+            counter++;
         } catch (Exception e) {
             System.err.println("Problem in running update " + qid + " against Asterixdb ! " + e.getMessage());
             System.out.println(((AqlUpdate) update).printAqlStatement());
@@ -98,6 +110,10 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
             return;
         }
 
+        if (counter % TRACE_PACE == 0) {
+            printTimeCounters();
+            System.out.println("Completed: " + counter);
+        }
 
         int statusCode = response.getStatusLine().getStatusCode();
         if (statusCode != HttpStatus.SC_OK) {
@@ -105,8 +121,6 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
 
         }
         updateStat(qid, 0, 0); //rspTime);
-
-
     }
 
     @Override
@@ -121,6 +135,9 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
             System.out.println(" AVG: " + avg.getAsDouble());
         }
     }
+
+
+
 
     @Override
     protected void updateStat(int qid, int vid, long rspTime) {
@@ -145,4 +162,5 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
     private String getUpdateUrl() {
         return ("http://" + ccUrl + ":" + Constants.ASTX_AQL_REST_API_PORT + "/update");
     }
+
 }

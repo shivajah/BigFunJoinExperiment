@@ -19,6 +19,7 @@ import asterixUpdateClient.AsterixClientUpdateWorkload;
 import asterixUpdateClient.AsterixConcurrentUpdateWorkload;
 import client.AbstractReadOnlyClient;
 import client.AbstractUpdateClient;
+import com.sun.tools.internal.jxc.ap.Const;
 import structure.UpdateTag;
 
 public class AsterixClientConfig extends AbstractClientConfig {
@@ -119,6 +120,11 @@ public class AsterixClientConfig extends AbstractClientConfig {
             ignore = (int) getParamValue(Constants.IGNORE);
         }
 
+        int threadPoolSize = Constants.DEFAULT_THREAD_POOL_SIZE;
+        if (isParamSet(Constants.THREAD_POOL_SIZE)) {
+            threadPoolSize = (int) getParamValue(Constants.THREAD_POOL_SIZE);
+        }
+
         UpdateTag upTag = null;
         if (oprType.equals(Constants.INSERT_OPR_TYPE)) {
             upTag = UpdateTag.INSERT;
@@ -133,11 +139,15 @@ public class AsterixClientConfig extends AbstractClientConfig {
         switch (updateType) {
             case Constants.ASTX_CONCURRENT_UPDATE_CLIENT_TAG:
                 return new AsterixClientUpdateWorkload(cc, dvName, dsName, keyName, upTag, batchSize, limit, updatesFile,
-                        statsFile, ignore, true);
+                        statsFile, ignore, threadPoolSize);
             case Constants.ASTX_UPDATE_CLIENT_TAG:
             default:
                 return new AsterixClientUpdateWorkload(cc, dvName, dsName, keyName, upTag, batchSize, limit, updatesFile,
-                        statsFile, ignore, false);
+                        statsFile, ignore);
         }
+    }
+
+    public AbstractUpdateClient readHybridWorkloadConfiguration(String bigFunHomePath) {
+        return null;
     }
 }
