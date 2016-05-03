@@ -21,10 +21,12 @@ import workloadGenerator.ReadOnlyWorkloadGenerator;
 
 public class AsterixClientReadOnlyWorkload extends AbstractReadOnlyClient {
 
-    final String ccUrl;
-    final String dvName;
-    final int iterations;
+    String ccUrl;
+    String dvName;
+    int iterations;
     ReadOnlyWorkloadGenerator rwg;
+
+    public AsterixClientReadOnlyWorkload() {};
 
     public AsterixClientReadOnlyWorkload(String cc, String dvName, int iter, String qGenConfigFile, String qIxFile,
                                          String statsFile, int ignore, String qSeqFile, String resDumpFile, long seed, long maxUsrId) {

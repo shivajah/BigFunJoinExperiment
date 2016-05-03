@@ -83,7 +83,7 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
             updateStat(qid, vid, Constants.INVALID_TIME);
             return;
         }
-        updateStat(qid, vid, rspTime);
+        /*updateStat(qid, vid, rspTime);
         if (resPw != null) {
             resPw.println(qid);
             resPw.println("Ver " + vid);
@@ -91,8 +91,8 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
             if (dumpResults) {
                 resPw.println(content + "\n");
             }
-        }
-        System.out.println("Q" + qid + " version " + vid + "\t" + rspTime); //trace the progress
+        }*/
+        //System.out.println("Q" + qid + " version " + vid + "\t" + rspTime); //trace the progress
 
     }
 }

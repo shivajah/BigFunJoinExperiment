@@ -62,7 +62,8 @@ public class Driver {
         System.out.println("Total time: " + Duration.between(end, current));
         System.out.println("Total Passed: " + AsterixUpdateClientUtility.passedTxns);
         System.out.println("Total failed: " + AsterixUpdateClientUtility.failedTxns);
-        client.generateReport();
+        //TODO: in case of concurrent workloads, call the right client workload.
+        // client.generateReport();
         System.out.println("\nBigFUN Benchmark is done.\n");
     }
 

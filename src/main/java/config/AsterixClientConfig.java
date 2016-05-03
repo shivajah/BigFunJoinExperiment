@@ -15,6 +15,7 @@
 package config;
 
 import asterixReadOnlyClient.AsterixClientReadOnlyWorkload;
+import asterixReadOnlyClient.AsterixConcurrentReadOnlyWorkload;
 import asterixUpdateClient.AsterixClientUpdateWorkload;
 import asterixUpdateClient.AsterixConcurrentUpdateWorkload;
 import client.AbstractReadOnlyClient;
@@ -26,6 +27,10 @@ public class AsterixClientConfig extends AbstractClientConfig {
 
     public AsterixClientConfig(String clientConfigFile) {
         super(clientConfigFile);
+    }
+
+    public void concurrentReadOnlyClientConfig(String bigFunHomePath) {
+
     }
 
     public AbstractReadOnlyClient readReadOnlyClientConfig(String bigFunHomePath) {
@@ -86,12 +91,28 @@ public class AsterixClientConfig extends AbstractClientConfig {
             resultsFile = (String) getParamValue(Constants.RESULTS_DUMP_FILE);
         }
 
-        AsterixClientReadOnlyWorkload rClient = new AsterixClientReadOnlyWorkload(cc, dvName, iter, qGenConfigFile,
-                qIxFile, statsFile, ignore, workloadFile, /*dumpDirFile,*/ resultsFile, seed, maxUserId);
+        int numReaders = 1;
+        if (isParamSet(Constants.NUM_CONCURRENT_READERS)) {
+            numReaders = (int) getParamValue(Constants.NUM_CONCURRENT_READERS);
+        }
+        AsterixClientReadOnlyWorkload rClient;
+        if (numReaders == 1) {
+            rClient = getAsterixClientReadOnlyWorkload(cc, dvName, iter, qIxFile, qGenConfigFile, workloadFile, statsFile, seed, maxUserId, ignore, resultsFile);
+        }
+        else {
+            rClient = new AsterixConcurrentReadOnlyWorkload(cc, dvName, iter, qGenConfigFile,
+                    qIxFile, statsFile, ignore, workloadFile, /*dumpDirFile,*/ resultsFile, seed, maxUserId, numReaders);
+        }
 
         rClient.setExecQuery(qExec);
-        rClient.setDumpResults(dumpResults);
+        //TODO: This needs to be set for every client in the concurrent workload.
+        //rClient.setDumpResults(dumpResults);
         return rClient;
+    }
+
+    private AsterixClientReadOnlyWorkload getAsterixClientReadOnlyWorkload(String cc, String dvName, int iter, String qIxFile, String qGenConfigFile, String workloadFile, String statsFile, long seed, long maxUserId, int ignore, String resultsFile) {
+        return new AsterixClientReadOnlyWorkload(cc, dvName, iter, qGenConfigFile,
+                    qIxFile, statsFile, ignore, workloadFile, /*dumpDirFile,*/ resultsFile, seed, maxUserId);
     }
 
     @Override
