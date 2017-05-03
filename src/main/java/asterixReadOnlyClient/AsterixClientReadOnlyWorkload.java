@@ -25,7 +25,6 @@ public class AsterixClientReadOnlyWorkload extends AbstractReadOnlyClient {
     String dvName;
     int iterations;
     ReadOnlyWorkloadGenerator rwg;
-
     public AsterixClientReadOnlyWorkload() {};
 
     public AsterixClientReadOnlyWorkload(String cc, String dvName, int iter, String qGenConfigFile, String qIxFile,

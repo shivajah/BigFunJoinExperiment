@@ -93,8 +93,6 @@ public class AsterixUpdateClientUtility extends AbstractUpdateClientUtility {
             rspTime = (e - s);
         } catch (Exception e) {
             System.err.println("Problem in running update " + qid + " against Asterixdb ! " + e.getMessage());
-            System.out.println(((AqlUpdate) update).printAqlStatement());
-            //failedTxns++;
             updateStat(qid, 0, Constants.INVALID_TIME);
             return;
         }
@@ -122,7 +120,8 @@ public class AsterixUpdateClientUtility extends AbstractUpdateClientUtility {
     }
 
     private String getUpdateUrl() {
-        return ("http://" + ccUrl + ":" + Constants.ASTX_AQL_REST_API_PORT + "/update");
+       // return ("http://" + ccUrl + ":" + Constants.ASTX_AQL_REST_API_PORT + "/update");
+        return ("http://127.0.0.1:" + Constants.ASTX_AQL_REST_API_PORT + "/update");
     }
 
     @Override

@@ -36,7 +36,7 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
     public AsterixReadOnlyClientUtility(String cc, String qIxFile, String qGenConfigFile, String statsFile, int ignore,
                                         String qSeqFile, String resultsFile) {
         super(qIxFile, qGenConfigFile, statsFile, ignore, qSeqFile, resultsFile);
-        this.ccUrl = cc;
+        this.ccUrl = "127.0.0.1";
     }
 
     @Override
@@ -45,6 +45,7 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
         httpGet = new HttpGet();
         try {
             roBuilder = new URIBuilder("http://" + ccUrl + ":" + Constants.ASTX_AQL_REST_API_PORT + "/query");
+           // System.out.println(roBuilder.toString());
         } catch (URISyntaxException e) {
             System.err.println("Problem in initializing Read-Only URI Builder");
             e.printStackTrace();
@@ -67,11 +68,13 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
             roBuilder.setParameter("query", qBody);
             URI uri = roBuilder.build();
             httpGet.setURI(uri);
+           // System.err.println(uri);
 
             long s = System.currentTimeMillis();
             HttpResponse response = httpclient.execute(httpGet);
             HttpEntity entity = response.getEntity();
             content = EntityUtils.toString(entity);
+            System.out.println("Result: "+content);
             EntityUtils.consume(entity);
             long e = System.currentTimeMillis();
 
@@ -83,15 +86,15 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
             updateStat(qid, vid, Constants.INVALID_TIME);
             return;
         }
-        /*updateStat(qid, vid, rspTime);
+        updateStat(qid, vid, rspTime);
         if (resPw != null) {
-            resPw.println(qid);
-            resPw.println("Ver " + vid);
-            resPw.println(qBody + "\n");
+//            resPw.println(qid);
+//            resPw.println("Ver " + vid);
+//            resPw.println(qBody + "\n");
             if (dumpResults) {
                 resPw.println(content + "\n");
             }
-        }*/
+        }
         //System.out.println("Q" + qid + " version " + vid + "\t" + rspTime); //trace the progress
 
     }

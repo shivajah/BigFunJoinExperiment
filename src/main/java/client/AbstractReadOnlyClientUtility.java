@@ -29,7 +29,7 @@ public abstract class AbstractReadOnlyClientUtility extends AbstractClientUtilit
     private final String qIndexFile;
     private final String qGenConfigFile;
     public ArrayList<Pair> qvids;
-    protected boolean dumpResults = false;
+    protected boolean dumpResults = true;
 
     public abstract void executeQuery(int qid, int vid, String qBody);
 

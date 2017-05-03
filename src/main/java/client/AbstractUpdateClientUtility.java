@@ -43,7 +43,7 @@ public abstract class AbstractUpdateClientUtility extends AbstractClientUtility 
     public AbstractUpdateClientUtility(int batchSize, int limit, AbstractUpdateWorkloadGenerator uwg,
                                        String updatesFile, String statsFile, int ignore) {
         super(statsFile, null, ignore);
-        this.batchSize = batchSize;
+        this.batchSize = 10;
         this.limit = limit;
         this.updatesFile = updatesFile;
         this.uwg = uwg;

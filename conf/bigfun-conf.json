@@ -8,6 +8,6 @@
 "dataset" : "GleambookUsers",
 "primary_key" : "id",
 "operation" : "insert",
-"updates_file" : "/tmp/insert.adm",
+"updates_file" : "/Users/shiva/Documents/p2/gbook_users.adm",
 "stats_file" : "/tmp/stats.txt"
 }

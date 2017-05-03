@@ -45,6 +45,7 @@ public class Driver {
         String clientTypeTag = (String) clientConfig.getParamValue(Constants.CLIENT_TYPE);
         AbstractClient client = null;
         switch (clientTypeTag) {
+            case Constants.ASTX_MEMORY_ADJUSTED_READONLY_CLIENT_TAG:
             case Constants.ASTX_RANDOM_CLIENT_TAG:
                 client = clientConfig.readReadOnlyClientConfig(bigFunHome);
                 break;
@@ -52,6 +53,8 @@ public class Driver {
             case Constants.ASTX_CONCURRENT_UPDATE_CLIENT_TAG:
                 client = clientConfig.readUpdateClientConfig(bigFunHome, clientTypeTag);
                 break;
+
+                //client =  TODO
             default:
                 System.err.println("Unknown/Invalid client type:\t" + clientTypeTag);
         }
@@ -59,9 +62,9 @@ public class Driver {
         current = Instant.now();
         client.execute();
         end = Instant.now();
-        System.out.println("Total time: " + Duration.between(end, current));
-        System.out.println("Total Passed: " + AsterixUpdateClientUtility.passedTxns);
-        System.out.println("Total failed: " + AsterixUpdateClientUtility.failedTxns);
+        //System.out.println("Total time: " + Duration.between(end, current));
+     //   System.out.println("Total Passed: " + AsterixUpdateClientUtility.passedTxns);
+      //  System.out.println("Total failed: " + AsterixUpdateClientUtility.failedTxns);
         //TODO: in case of concurrent workloads, call the right client workload.
         // client.generateReport();
         System.out.println("\nBigFUN Benchmark is done.\n");

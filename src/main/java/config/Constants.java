@@ -39,9 +39,10 @@ public class Constants {
     public static final String UPDATES_FILE = "updates_file";
     public static final int INSERT_QIX = 18;
     public static final int DELETE_QIX = 19;
-    public static final String CC_URL = "cc";
+    public static final String CC_URL = "cc ";
     public static final String ASTX_DV_NAME = "dataverse";
     public static final String ASTX_RANDOM_CLIENT_TAG = "AsterixdbReadOnly";
+    public static final String ASTX_MEMORY_ADJUSTED_READONLY_CLIENT_TAG = "AsterixMemoryAdjustedRead";
     public static final String ASTX_DUMP_RESULTS = "dumpResults";
     public static final String ASTX_UPDATE_CLIENT_TAG = "AsterixdbUpdate";
     public static final String ASTX_CONCURRENT_UPDATE_CLIENT_TAG = "AsterixConcurrentUpdate";
@@ -72,4 +73,10 @@ public class Constants {
     public static final String THREAD_POOL_SIZE = "thread-pool-size";
     public static final int DEFAULT_THREAD_POOL_SIZE = 10;
     public static final String NUM_CONCURRENT_READERS = "num-concurrent-readers";
+    public static final String GENERAL_MEMORY_DELTA = "general-memory-delta";
+    public static final String JOIN_MEMORY = "join-memory";
+    public static final String JOIN_MEMORY_DELTA = "join-memory-delta";
+    public static final String GROUP_MEMORY = "group-memory";
+    public static final String GROUP_MEMORY_DELTA = "group-memory-delta";
+    public static final String FRAMESIZE = "framesize";
 }

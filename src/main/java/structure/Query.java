@@ -50,6 +50,33 @@ public class Query {
         if (argIt.hasNext()) {
             st.append(" ").append(argIt.next().admPrint());
         }
+        System.out.println("query: " + st.toString());
+        return st.toString();
+    }
+    public String aqlPrint(String dataverse,double joinMemory,double groupMemory,double framesize) {
+        Iterator<String> segIt = segments.iterator();
+        Iterator<IArgument> argIt = args.iterator();
+
+        StringBuilder st = new StringBuilder("use dataverse " + dataverse + ";\n");
+        if(joinMemory > 0){
+            st.append("set "+'"'+"compiler.joinmemory"+'"'+' '+'"'+joinMemory+"MB"+'"'+"\n");
+        }
+        if (groupMemory > 0){
+            st.append("set "+'"'+"compiler.groupmemory"+'"'+' '+'"'+groupMemory+"MB"+'"'+"\n");
+        }
+        if(framesize > 0) {
+            st.append("set "+'"'+"compiler.framesize"+'"'+' '+'"'+framesize+"MB"+'"'+"\n");
+        }
+        while (segIt.hasNext()) {
+            st.append(segIt.next()).append(" ");
+            if (argIt.hasNext()) {
+                st.append(argIt.next().admPrint()).append(" ");
+            }
+        }
+        if (argIt.hasNext()) {
+            st.append(" ").append(argIt.next().admPrint());
+        }
+       // System.out.println("query: " + st.toString());
         return st.toString();
     }
 
@@ -63,4 +90,5 @@ public class Query {
     public List<IArgument> getArguments() {
         return this.args;
     }
+
 }

@@ -15,12 +15,10 @@
 package config;
 
 import asterixReadOnlyClient.AsterixClientReadOnlyWorkload;
-import asterixReadOnlyClient.AsterixConcurrentReadOnlyWorkload;
+import asterixReadOnlyClient.AsterixMemoryAdjustedReadOnlyWorkload;
 import asterixUpdateClient.AsterixClientUpdateWorkload;
-import asterixUpdateClient.AsterixConcurrentUpdateWorkload;
 import client.AbstractReadOnlyClient;
 import client.AbstractUpdateClient;
-import com.sun.tools.internal.jxc.ap.Const;
 import structure.UpdateTag;
 
 public class AsterixClientConfig extends AbstractClientConfig {
@@ -34,7 +32,7 @@ public class AsterixClientConfig extends AbstractClientConfig {
     }
 
     public AbstractReadOnlyClient readReadOnlyClientConfig(String bigFunHomePath) {
-        String cc = (String) getParamValue(Constants.CC_URL);
+        String cc = "127.0.0.1";//(String) getParamValue(Constants.CC_URL);
         String dvName = (String) getParamValue(Constants.ASTX_DV_NAME);
         int iter = (int) getParamValue(Constants.ITERATIONS);
 
@@ -95,14 +93,41 @@ public class AsterixClientConfig extends AbstractClientConfig {
         if (isParamSet(Constants.NUM_CONCURRENT_READERS)) {
             numReaders = (int) getParamValue(Constants.NUM_CONCURRENT_READERS);
         }
+
+        /* Memory Adjustment */
+
+        int joinMemory = -1; int joinMemoryDelta = -1;
+        if (isParamSet(Constants.JOIN_MEMORY)){
+            joinMemory = (int) getParamValue(Constants.JOIN_MEMORY);
+            joinMemoryDelta = isParamSet(Constants.JOIN_MEMORY_DELTA) ? (int) getParamValue(Constants.JOIN_MEMORY_DELTA):isParamSet(Constants.GENERAL_MEMORY_DELTA)?(int) getParamValue(Constants.GENERAL_MEMORY_DELTA):-1;
+        }
+
+        int groupMemory = -1; int groupMemoryDelta = -1;
+        if (isParamSet(Constants.GROUP_MEMORY)){
+            groupMemory = (int) getParamValue(Constants.GROUP_MEMORY);
+            groupMemoryDelta = isParamSet(Constants.GROUP_MEMORY_DELTA) ? (int) getParamValue(Constants.GROUP_MEMORY_DELTA):isParamSet(Constants.GENERAL_MEMORY_DELTA)?(int) getParamValue(Constants.GENERAL_MEMORY_DELTA):-1;
+        }
+
+        int frameSize = -1;
+        if(isParamSet(Constants.FRAMESIZE)) {
+            frameSize = (int) getParamValue(Constants.FRAMESIZE);
+        }
         AsterixClientReadOnlyWorkload rClient;
-        if (numReaders == 1) {
-            rClient = getAsterixClientReadOnlyWorkload(cc, dvName, iter, qIxFile, qGenConfigFile, workloadFile, statsFile, seed, maxUserId, ignore, resultsFile);
-        }
-        else {
-            rClient = new AsterixConcurrentReadOnlyWorkload(cc, dvName, iter, qGenConfigFile,
-                    qIxFile, statsFile, ignore, workloadFile, /*dumpDirFile,*/ resultsFile, seed, maxUserId, numReaders);
-        }
+        //if (numReaders == 1) {
+         //   if(frameSize > 0 && (joinMemory > 0 || groupMemory > 0)){
+                rClient = new AsterixMemoryAdjustedReadOnlyWorkload(cc, dvName,qGenConfigFile,qIxFile,statsFile,ignore,
+                        workloadFile,statsFile,seed,maxUserId);
+//            }
+//            else {
+//                rClient = getAsterixClientReadOnlyWorkload(cc, dvName, iter, qIxFile, qGenConfigFile, workloadFile, statsFile, seed, maxUserId, ignore, resultsFile);
+//            }
+//        }
+//        else {
+//            rClient = new AsterixConcurrentReadOnlyWorkload(cc, dvName, iter, qGenConfigFile,
+//                    qIxFile, statsFile, ignore, workloadFile, /*dumpDirFile,*/ resultsFile, seed, maxUserId, numReaders);
+//        }
+
+
 
         rClient.setExecQuery(qExec);
         //TODO: This needs to be set for every client in the concurrent workload.

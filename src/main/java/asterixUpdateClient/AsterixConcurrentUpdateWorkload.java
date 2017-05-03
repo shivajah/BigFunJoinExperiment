@@ -65,7 +65,7 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
         this.threadPoolSize = threadPoolSize;
         waitTimeDistribution = new PoissonDistribution(DISTRIBUTION_MEAN, DISTRIBUTION_EPSILON);
         //waitTimeDistribution = new NormalDistribution();
-        executorService = Executors.newFixedThreadPool(threadPoolSize);
+        //executorService = Executors.newFixedThreadPool(threadPoolSize);
 
     }
 
@@ -92,9 +92,6 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
             EntityUtils.consume(entity);
             String threadName = Thread.currentThread().getName();
             long waitTime = getWaitTime();
-            //System.out.println("T: " + threadName + " sleep: " + (waitTime * 10) + "ms");
-            //Thread.sleep(waitTime);
-
             if (timeCounters.get(threadName) != null) {
                 timeCounters.get(threadName).add(waitTime);
             } else {
@@ -160,7 +157,7 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
     }
 
     private String getUpdateUrl() {
-        return ("http://" + ccUrl + ":" + Constants.ASTX_AQL_REST_API_PORT + "/update");
+        return ("http://127.0.0.1:" + Constants.ASTX_AQL_REST_API_PORT + "/update");
     }
 
 }
