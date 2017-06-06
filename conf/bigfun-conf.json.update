@@ -1,0 +1,13 @@
+{
+"clientType" : "AsterixdbUpdate",
+"cc" : "sensorium-38.ics.uci.edu",
+"batch_size" : 5,
+"limit" : -1,
+"ignore_rounds" : 10,
+"dataverse" : "SocialNetworkData",
+"dataset" : "GleambookUsers",
+"primary_key" : "id",
+"operation" : "insert",
+"updates_file" : "/Users/shiva/Documents/p2/gbook_users.adm",
+"stats_file" : "/tmp/stats.txt"
+}

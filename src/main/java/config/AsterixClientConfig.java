@@ -32,7 +32,8 @@ public class AsterixClientConfig extends AbstractClientConfig {
     }
 
     public AbstractReadOnlyClient readReadOnlyClientConfig(String bigFunHomePath) {
-        String cc = "127.0.0.1";//(String) getParamValue(Constants.CC_URL);
+        //String cc = "127.0.0.1";//(String) getParamValue(Constants.CC_URL);
+        String cc = "sensorium-38.ics.uci.edu";//(String) getParamValue(Constants.CC_URL);
         String dvName = (String) getParamValue(Constants.ASTX_DV_NAME);
         int iter = (int) getParamValue(Constants.ITERATIONS);
 

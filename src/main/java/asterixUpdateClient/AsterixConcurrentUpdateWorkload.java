@@ -157,7 +157,7 @@ public class AsterixConcurrentUpdateWorkload extends AbstractUpdateClientUtility
     }
 
     private String getUpdateUrl() {
-        return ("http://127.0.0.1:" + Constants.ASTX_AQL_REST_API_PORT + "/update");
+        return ("http://sensorium-38.ics.uci.edu:" + Constants.ASTX_AQL_REST_API_PORT + "/update");
     }
 
 }

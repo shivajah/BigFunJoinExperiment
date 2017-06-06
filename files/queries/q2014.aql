@@ -1,6 +1,6 @@
 count(for $message in dataset GleambookMessages
 for $user in dataset GleambookUsers
-where $message.authorId /*+ nbj */  = $user.id
+where $message.author_id /*+ nbj */  = $user.id
 return {
 "user":  $user,
 "message": $message

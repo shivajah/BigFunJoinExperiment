@@ -1,0 +1,10 @@
+count(
+for $message in dataset ChirpMessages
+for $user in dataset ChirpUsers
+where $message.id = $user.id 
+return {
+"user_id": $user.id,
+"message_id": $message.chirpid
+})
+
+

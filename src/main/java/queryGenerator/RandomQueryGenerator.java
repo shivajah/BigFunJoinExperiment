@@ -98,6 +98,9 @@ public class RandomQueryGenerator {
             case 1016: //spatial Join
                 nextQ1016(qIx, vIx);
                 break;
+            case 3015:
+                nextQ3015(qIx,vIx);
+                break;
             default:
                 return null;
         }
@@ -182,27 +185,27 @@ public class RandomQueryGenerator {
     }
 
     private void nextQ1014(int qid, int vid) {
-        DateTimeArgument s = randomDateTime(START_DATE, END_DATE);
-        ArrayList<Integer> p = qps.getParam(qid, vid);
-        DateTimeArgument e = shift(s, p.get(0));
-        DateTimeArgument s2 = randomDateTime(START_DATE, END_DATE);
-        DateTimeArgument e2 = shift(s2, p.get(1));
-        args.add(s);
-        args.add(e);
-        args.add(s2);
-        args.add(e2);
+//        DateTimeArgument s = randomDateTime(START_DATE, END_DATE);
+//        ArrayList<Integer> p = qps.getParam(qid, vid);
+//        DateTimeArgument e = shift(s, p.get(0));
+//        DateTimeArgument s2 = randomDateTime(START_DATE, END_DATE);
+//        DateTimeArgument e2 = shift(s2, p.get(1));
+//        //args.add(s);
+//        args.add(e);
+//       // args.add(s2);
+//        args.add(e2);
     }
 
     private void nextQ1015(int qid, int vid) {
-        DateTimeArgument s = randomDateTime(START_DATE, END_DATE);
-        ArrayList<Integer> p = qps.getParam(qid, vid);
-        DateTimeArgument e = shift(s, p.get(0));
-        DateTimeArgument s2 = randomDateTime(START_DATE, END_DATE);
-        DateTimeArgument e2 = shift(s2, p.get(1));
-        args.add(s);
-        args.add(e);
-        args.add(s2);
-        args.add(e2);
+//        DateTimeArgument s = randomDateTime(START_DATE, END_DATE);
+//        ArrayList<Integer> p = qps.getParam(qid, vid);
+//        DateTimeArgument e = shift(s, p.get(0));
+//        DateTimeArgument s2 = randomDateTime(START_DATE, END_DATE);
+//        DateTimeArgument e2 = shift(s2, p.get(1));
+//        //args.add(s);
+//        args.add(e);
+//        //args.add(s2);
+//        args.add(e2);
     }
 
     private void nextQ1012(int qid, int vid) {
@@ -239,6 +242,8 @@ public class RandomQueryGenerator {
         args.add(s);
         args.add(e);
         args.add(r);
+    }
+    private void nextQ3015(int qid,int vid){
     }
 
     //Utility Methods

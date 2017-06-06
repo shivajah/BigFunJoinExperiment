@@ -36,7 +36,7 @@ public class AsterixReadOnlyClientUtility extends AbstractReadOnlyClientUtility 
     public AsterixReadOnlyClientUtility(String cc, String qIxFile, String qGenConfigFile, String statsFile, int ignore,
                                         String qSeqFile, String resultsFile) {
         super(qIxFile, qGenConfigFile, statsFile, ignore, qSeqFile, resultsFile);
-        this.ccUrl = "127.0.0.1";
+        this.ccUrl = "sensorium-38.ics.uci.edu";
     }
 
     @Override

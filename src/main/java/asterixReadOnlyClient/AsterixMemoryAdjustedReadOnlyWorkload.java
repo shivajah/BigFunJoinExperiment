@@ -1,8 +1,14 @@
 package asterixReadOnlyClient;
+
 import structure.Pair;
 import structure.Query;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by shiva on 2/2/17.
@@ -11,17 +17,17 @@ public class AsterixMemoryAdjustedReadOnlyWorkload extends AsterixClientReadOnly
     int minJoinMemory;
     int joinMemoryDelta;
     int maxJoinMemory;
-    double frameSize =-1;
-    double groupMemory=-1;
+    int iteration;
 
     public AsterixMemoryAdjustedReadOnlyWorkload(String cc, String dvName, String qGenConfigFile, String qIxFile,
                                                  String statsFile, int ignore, String qSeqFile, String resDumpFile, long seed, long maxUsrId){
         super();
         this.ccUrl = cc;
         this.dvName = dvName;
-        this.minJoinMemory = 4096; //4gb
-        this.joinMemoryDelta = 1024;
-        this.maxJoinMemory = 13312; //13gb
+        this.minJoinMemory = 1024; //4gb
+        this.joinMemoryDelta = 512;
+        this.maxJoinMemory = 6144; //13gb
+        this.iteration = 3;
         setClientUtil(qIxFile, qGenConfigFile, statsFile, ignore, qSeqFile, resDumpFile);
         clUtil.init();
         initReadOnlyWorkloadGen(seed, maxUsrId);
@@ -80,44 +86,67 @@ public class AsterixMemoryAdjustedReadOnlyWorkload extends AsterixClientReadOnly
 //
 //
 //        }
-        String[] filenames = {"NBJ.txt","Hybrid.txt","NBJ50.txt"};
+        String[] filenames = {"Hybrid.txt", "NBJ50.txt", "NBJ.txt"};
         BufferedWriter bw = null;
         FileWriter fw = null;
-        int i = 0;
-        for (Pair qvPair : clUtil.qvids) {
-            File f = new File(filenames[i]);
+        File hybrid = new File("Hybrid.txt");
+        File nbj = new File("NBJ.txt");
+        File nbj50 = new File("NBJ50.txt");
+        List<File> fileList = new LinkedList<>();
+        fileList.add(hybrid);
+        fileList.add(nbj);
+        fileList.add(nbj50);
+        for (File f : fileList) {
             try {
-                if (!f.exists()) {
-                    f.createNewFile();
-                } else {
+                if (f.exists()) {
                     f.delete();
-                    f.createNewFile();
                 }
-                fw = new FileWriter(f.getAbsoluteFile(), true);
-                bw = new BufferedWriter(fw);
-                int qid = qvPair.getQId();
-                int vid = qvPair.getVId();
-                Query q = rwg.nextQuery(qid, vid);
-                int joinMemory = minJoinMemory;
-                while (joinMemory <= maxJoinMemory) {
-                    long startTime = 0l;
-                    long endTime = 0l;
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        int i = 0;
+        Query cacheCleaner = rwg.nextQuery(3015, 1);
+        int joinMemory = maxJoinMemory;
+        while (joinMemory >= minJoinMemory) {
+            for (Pair qvPair : clUtil.qvids) {
+                File f;
+                if (i % 3 == 0) {
+                    f = hybrid;
+                } else if (i % 3 == 1) {
+                    f = nbj50;
+                } else {
+                    f = nbj;
+                }
+                try {
+                    fw = new FileWriter(f.getAbsoluteFile(), true);
+                    bw = new BufferedWriter(fw);
+                    int qid = qvPair.getQId();
+                    int vid = qvPair.getVId();
+                    Query q = rwg.nextQuery(qid, vid);
+                    long startTime;
+                    long endTime;
+                    long diff = 0l;
                     if (q == null) {
                         continue; //do not break, if one query is not found
                     }
                     if (execQuery) {
-                        startTime = System.currentTimeMillis();
-                        clUtil.executeQuery(qid, vid, q.aqlPrint(dvName));
-                        endTime = System.currentTimeMillis();
-                        String result = joinMemory/1024 + " " + (endTime - startTime )+"\n";
+                        clUtil.executeQuery(3015, 1, cacheCleaner.aqlPrint(dvName));//clean the cache
+                        for (int it = 0; it < iteration; it++) {
+                            startTime = System.currentTimeMillis();
+                            clUtil.executeQuery(qid, vid, q.aqlPrint(dvName));
+                            endTime = System.currentTimeMillis();
+                            diff += endTime - startTime;
+                        }
+                        String result = joinMemory / 1024 + " " + diff / iteration + "\n";
                         bw.write(result);
                     }
-                    joinMemory += joinMemoryDelta;
-                }
-                i++;
-            } catch (IOException e) {
+
+            } catch(IOException e){
                 e.printStackTrace();
-            } finally {
+            } finally{
 
                 try {
                     if (bw != null)
@@ -132,8 +161,10 @@ public class AsterixMemoryAdjustedReadOnlyWorkload extends AsterixClientReadOnly
 
                 }
             }
-
+            i++;
         }
+        joinMemory = joinMemory - joinMemoryDelta;
+    }
         clUtil.terminate();
     }
 

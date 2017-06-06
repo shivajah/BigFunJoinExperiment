@@ -1,13 +1,15 @@
 {
-"clientType" : "AsterixdbUpdate",
-"cc" : "127.0.0.1",
-"batch_size" : 5,
-"limit" : -1,
-"ignore_rounds" : 10,
+"clientType" : "AsterixMemoryAdjustedRead",
+"cc" : "sensorium-38.ics.uci.edu",
 "dataverse" : "SocialNetworkData",
-"dataset" : "GleambookUsers",
-"primary_key" : "id",
-"operation" : "insert",
-"updates_file" : "/Users/shiva/Documents/p2/gbook_users.adm",
-"stats_file" : "/tmp/stats.txt"
+"iterations" : 3,
+"ignore_rounds" : 1,
+"seed" : 5,
+"max_gleambookUser_id" : 400,
+"stats_file" : "/tmp/stats.txt",
+"dumpResults" : true,
+"res_dump_file" : "/tmp/res_dump.txt",
+"join-memory" : 32,
+"join-memory-delta" : 20,
+"framesize":4
 }
