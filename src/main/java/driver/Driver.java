@@ -14,15 +14,12 @@
  */
 package driver;
 
-import asterixUpdateClient.AsterixUpdateClientUtility;
 import client.AbstractClient;
 import config.AbstractClientConfig;
 import config.AsterixClientConfig;
 import config.Constants;
 
-import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.ExecutorService;
 
 public class Driver {
     public static void main(String[] args) {

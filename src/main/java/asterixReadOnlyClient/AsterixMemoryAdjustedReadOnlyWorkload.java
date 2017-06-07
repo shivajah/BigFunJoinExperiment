@@ -86,16 +86,16 @@ public class AsterixMemoryAdjustedReadOnlyWorkload extends AsterixClientReadOnly
 //
 //
 //        }
-        String[] filenames = {"Hybrid.txt", "NBJ50.txt", "NBJ.txt"};
+      //  String[] filenames = {"Hybrid.txt", "NBJ50.txt", "NBJ.txt"};
         BufferedWriter bw = null;
         FileWriter fw = null;
         File hybrid = new File("Hybrid.txt");
-        File nbj = new File("NBJ.txt");
-        File nbj50 = new File("NBJ50.txt");
+       // File nbj = new File("NBJ.txt");
+        //File nbj50 = new File("NBJ50.txt");
         List<File> fileList = new LinkedList<>();
         fileList.add(hybrid);
-        fileList.add(nbj);
-        fileList.add(nbj50);
+        //fileList.add(nbj);
+        //fileList.add(nbj50);
         for (File f : fileList) {
             try {
                 if (f.exists()) {
@@ -110,16 +110,17 @@ public class AsterixMemoryAdjustedReadOnlyWorkload extends AsterixClientReadOnly
         int i = 0;
         Query cacheCleaner = rwg.nextQuery(3015, 1);
         int joinMemory = maxJoinMemory;
+        File f = hybrid;
         while (joinMemory >= minJoinMemory) {
             for (Pair qvPair : clUtil.qvids) {
-                File f;
-                if (i % 3 == 0) {
-                    f = hybrid;
-                } else if (i % 3 == 1) {
-                    f = nbj50;
-                } else {
-                    f = nbj;
-                }
+              //  File f;
+                //if (i % 3 == 0) {
+                //    f = hybrid;
+               // } else if (i % 3 == 1) {
+              //      f = nbj50;
+            //    } else {
+              //      f = nbj;
+               // }
                 try {
                     fw = new FileWriter(f.getAbsoluteFile(), true);
                     bw = new BufferedWriter(fw);
